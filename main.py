@@ -11,6 +11,7 @@ import os
 import matplotlib.pyplot as plt
 
 import numpy as np
+import pandas as pd
 #Import library k-Means
 from sklearn.cluster import KMeans
 
@@ -63,17 +64,64 @@ for i in fileName:
         
 X = np.array(desc)
 
+################################################################################
+
 #Lakukan clustering terhadap X 
 kmeans_model = KMeans(n_clusters=150, random_state=0).fit(X)
 
 # Simpan hasil clustering berupa nomor klaster tiap objek/rekord di
-# varialbel klaster_objek
-klaster_objek = kmeans_model.labels_
+# varialbel labels_single
+labels_single = kmeans_model.labels_
 
 # Simpan hasil clustering berupa centroid (titik pusat) tiap kelompok
 # di variabel centroids
 centroids = kmeans_model.cluster_centers_ 
 
+###############################################################################
+
+#Data frame untuk menyimpan hasil cluster dan 
+#nilai jarak masing2 description ke centroidnya
+df_result = pd.DataFrame([])
+
+for ca, x in zip(labels_single, X):
+    # Menghitung Euclidean distance menggunakan linalg.norm()
+    dist = np.linalg.norm(x - centroids[ca])
+    row = pd.Series([ca, x, dist])      
+    row_df = pd.DataFrame([row])  
+    #Insert baris baru ke data frame
+    df_result = pd.concat([row_df, df_result], ignore_index=True)
+    
+#Rename kolom
+df_result.rename(columns = {0:'Cluster',1:'Description', 2:'Jarak ke Centroid'}, inplace = True)
+
+###############################################################################
+
+#Data frame untuk menyimpan rata-rata jarak setiap cluster ke centroid
+df_result2 = pd.DataFrame([])
+
+for m in range (max(labels_single)+1):
+    df = df_result[df_result['Cluster'] == m]
+    sumJarak = sum(df['Jarak ke Centroid'])  
+    rataRata = sumJarak / len(df)
+    row2 = pd.Series([m, rataRata])      
+    row_df2 = pd.DataFrame([row2])  
+    #Insert baris baru ke data frame
+    df_result2 = pd.concat([row_df2, df_result2], ignore_index=True)  
+ 
+#Rename kolom
+df_result2.rename(columns = {0:'Cluster',1:'Rata-rata'}, inplace = True)
+
+###############################################################################
+#Histogram Rata-rata jarak setiap cluster ke centroid
+count, bin_edges = np.histogram(df_result2['Rata-rata'])
+df_result2['Rata-rata'].plot(kind = 'hist', xticks = bin_edges)
+plt.title('Histogram Rata-rata Jarak Setiap Cluster ke Centroid')
+plt.xticks(fontsize=8, rotation=45)
+plt.ylabel('Frekuensi')  
+plt.xlabel('Rata-rata')                      
+plt.show()
+
+###############################################################################
 
 img_keypoints=cv2.drawKeypoints(img1,keypoint,img1)
 
