@@ -171,7 +171,7 @@ for key,description,myFile,myImage in zip(kp,desc,fileName,img):
         for index, row in new_df.iterrows():
             
             result = np.linalg.norm(row["Centroid"]-d)
-            if minim > result and result <= row["Rata-rata"]:
+            if minim > result and result <= row["Rata-rata"]+150:
                 minim = result
                 avg = row['Rata-rata']
         
