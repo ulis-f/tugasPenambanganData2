@@ -149,7 +149,8 @@ plt.show()
 ###############################################################################
 
 # buang rata rata dengan frekuensi dikit
-new_df = df_result2[(df_result2['Rata-rata']<=306.2)]
+#new_df = df_result2[(df_result2['Rata-rata']<=306.2)]
+new_df = df_result2
 print(new_df)
 count, bin_edges = np.histogram(new_df['Rata-rata'])
 new_df['Rata-rata'].plot(kind = 'hist', xticks = bin_edges)
@@ -160,27 +161,28 @@ plt.xlabel('Rata-rata')
 plt.show()
 
 kp,desc,fileName,img = getKeypoints()
-index=1
+idx=1
 for key,description,myFile,myImage in zip(kp,desc,fileName,img):
     keyWords=[]
     kNonWords=[]
     for k,d in zip(key,description):
-        min = sys.maxsize
-        avg = new_df['Rata-rata'].iloc[0]
+        minim = sys.maxsize
+        avg = sys.maxsize
         for index, row in new_df.iterrows():
             
             result = np.linalg.norm(row["Centroid"]-d)
-            if min > result and result <= row['Rata-rata']:
-                min = result
+            if minim > result and result <= row["Rata-rata"]:
+                minim = result
                 avg = row['Rata-rata']
         
-        if min < avg:
+        if minim < avg:
             keyWords.append(k)
         else:
             kNonWords.append(k)
-    img_keypoints = cv2.drawKeypoints(myImage,keyWords,myImage,(0,128,0))
-    img_keypoints = cv2.drawKeypoints(img_keypoints,kNonWords,img_keypoints,(255,0,0))
-    fileOut = 'img',index,'.jpg'
+    img_keypoints = cv2.drawKeypoints(myImage,keyWords,0,color= (0,128,0))
+    img_keypoints = cv2.drawKeypoints(img_keypoints,kNonWords,0,color=(255,0,0))
+    fileOut = 'img'+str(idx)+'.jpg'
+    idx+=1
     cv2.imwrite(fileOut,img_keypoints)
     
 
