@@ -22,6 +22,8 @@ def main():
     plt.figure(figsize=(64 , 64))    
     plt.imshow(img_keypoints); plt.show()
     cv2.imwrite(os.path.join(directory,'img1_keypoints.jpg'),img_keypoints)
+    print(description)
     
 if __name__ == '__main__':
     main()
+
