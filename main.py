@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """
+Created on Mon Jun  7 12:31:34 2021
+
 @author: 
 
 """
@@ -77,7 +79,6 @@ X = np.array(desc)
 
 ################################################################################
 
-<<<<<<< Updated upstream
 #Lakukan clustering terhadap X 
 
 kmeans_model = None
@@ -99,31 +100,7 @@ labels_single = kmeans_model.labels_
 # di variabel centroids
 centroids = kmeans_model.cluster_centers_ 
 print(centroids)
-=======
->>>>>>> Stashed changes
 
-wcss=[]
-for i in range(140,151):
-    #Lakukan clustering terhadap X 
-    kmeans_model = KMeans(n_clusters=i).fit(X)
-    
-    # Simpan hasil clustering berupa nomor klaster tiap objek/rekord di
-    # varialbel labels_single
-    #labels_single = kmeans_model.labels_
-    
-    # Simpan hasil clustering berupa centroid (titik pusat) tiap kelompok
-    # di variabel centroids
-    #centroids = kmeans_model.cluster_centers_ 
-    
-    #Cari nilai WCSS 
-    wcss_iter = kmeans_model.inertia_
-    wcss.append(wcss_iter)
-
-number_clusters = range(140,151)
-plt.plot(number_clusters,wcss)
-plt.title('Method Elbow')
-plt.xlabel('Nilai k')
-plt.ylabel('WCSS')  
 ###############################################################################
 
 #Data frame untuk menyimpan hasil cluster dan 
