@@ -79,31 +79,31 @@ X = np.array(desc)
 
 ###############################################################################
 
-wcss=[]
-for i in range(140,151): 
-    kmeans_model = KMeans(n_clusters=i).fit(X)
+# wcss=[]
+# for i in range(140,151): 
+#     kmeans_model = KMeans(n_clusters=i).fit(X)
     
-    #Cari nilai WCSS 
-    wcss_iter = kmeans_model.inertia_
-    wcss.append(wcss_iter)
+#     #Cari nilai WCSS 
+#     wcss_iter = kmeans_model.inertia_
+#     wcss.append(wcss_iter)
 
-number_clusters = range(140,151)
-plt.plot(number_clusters,wcss)
-plt.title('Method Elbow')
-plt.xlabel('Nilai k')
-plt.ylabel('WCSS') 
+# number_clusters = range(140,151)
+# plt.plot(number_clusters,wcss)
+# plt.title('Method Elbow')
+# plt.xlabel('Nilai k')
+# plt.ylabel('WCSS') 
 
-###############################################################################
-score_silhouette = []
-for i in range(150,201):
-    kmeans_model = KMeans(n_clusters=i).fit(X)
+# ###############################################################################
+# score_silhouette = []
+# for i in range(150,201):
+#     kmeans_model = KMeans(n_clusters=i).fit(X)
     
-    #Simpan hasil clustering berupa nomor klaster tiap objek/rekord di varialbel labels
-    labels = kmeans_model.labels_
+#     #Simpan hasil clustering berupa nomor klaster tiap objek/rekord di varialbel labels
+#     labels = kmeans_model.labels_
     
-    #Hitung score sillhoutte 
-    silhouette_avg = silhouette_score(X,labels)
-    score_silhouette.append(silhouette_avg)
+#     #Hitung score sillhoutte 
+#     silhouette_avg = silhouette_score(X,labels)
+#     score_silhouette.append(silhouette_avg)
 
 #k terbaik adalah 178            
 ###############################################################################
@@ -111,7 +111,7 @@ for i in range(150,201):
 
 kmeans_model = None
 
-if os.path.exists('./model.pkl'):
+if os.path.exists('./model178.pkl'):
     with open("model178.pkl", "rb") as f:
         kmeans_model = pickle.load(f)
     
@@ -180,8 +180,6 @@ plt.show()
 
 ###############################################################################
 
-# buang rata rata dengan frekuensi dikit
-#new_df = df_result2[(df_result2['Rata-rata']<=306.2)]
 new_df = df_result2
 print(new_df)
 count, bin_edges = np.histogram(new_df['Rata-rata'])
@@ -199,13 +197,12 @@ for key,description,myFile,myImage in zip(kp,desc,fileName,img):
     kNonWords=[]
     for k,d in zip(key,description):
         minim = sys.maxsize
-        avg = sys.maxsize
+        avg = 298
         for index, row in new_df.iterrows():
             
             result = np.linalg.norm(row["Centroid"]-d)
-            if minim > result and result <= row["Rata-rata"]+150:
-                minim = result
-                avg = row['Rata-rata']
+            if minim > result and result <= avg:
+                minim = result                
         
         if minim < avg:
             keyWords.append(k)
