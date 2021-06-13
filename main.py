@@ -79,31 +79,31 @@ X = np.array(desc)
 
 ###############################################################################
 
-# wcss=[]
-# for i in range(140,151): 
-#     kmeans_model = KMeans(n_clusters=i).fit(X)
+wcss=[]
+for i in range(140,151): 
+    kmeans_model = KMeans(n_clusters=i).fit(X)
     
-#     #Cari nilai WCSS 
-#     wcss_iter = kmeans_model.inertia_
-#     wcss.append(wcss_iter)
+    #Cari nilai WCSS 
+    wcss_iter = kmeans_model.inertia_
+    wcss.append(wcss_iter)
 
-# number_clusters = range(140,151)
-# plt.plot(number_clusters,wcss)
-# plt.title('Method Elbow')
-# plt.xlabel('Nilai k')
-# plt.ylabel('WCSS') 
+number_clusters = range(140,151)
+plt.plot(number_clusters,wcss)
+plt.title('Method Elbow')
+plt.xlabel('Nilai k')
+plt.ylabel('WCSS') 
 
-# ###############################################################################
-# score_silhouette = []
-# for i in range(150,201):
-#     kmeans_model = KMeans(n_clusters=i).fit(X)
+###############################################################################
+score_silhouette = []
+for i in range(150,201):
+    kmeans_model = KMeans(n_clusters=i).fit(X)
     
-#     #Simpan hasil clustering berupa nomor klaster tiap objek/rekord di varialbel labels
-#     labels = kmeans_model.labels_
+    #Simpan hasil clustering berupa nomor klaster tiap objek/rekord di varialbel labels
+    labels = kmeans_model.labels_
     
-#     #Hitung score sillhoutte 
-#     silhouette_avg = silhouette_score(X,labels)
-#     score_silhouette.append(silhouette_avg)
+    #Hitung score sillhoutte 
+    silhouette_avg = silhouette_score(X,labels)
+    score_silhouette.append(silhouette_avg)
 
 #k terbaik adalah 178            
 ###############################################################################
