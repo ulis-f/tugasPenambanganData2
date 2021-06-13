@@ -14,8 +14,8 @@ import numpy as np
 import pandas as pd
 import pickle
 import sys
-#Import library k-Means
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 
 def getKeypoints():
     
@@ -77,19 +77,47 @@ for i in fileName:
         
 X = np.array(desc)
 
-################################################################################
+###############################################################################
 
+wcss=[]
+for i in range(140,151): 
+    kmeans_model = KMeans(n_clusters=i).fit(X)
+    
+    #Cari nilai WCSS 
+    wcss_iter = kmeans_model.inertia_
+    wcss.append(wcss_iter)
+
+number_clusters = range(140,151)
+plt.plot(number_clusters,wcss)
+plt.title('Method Elbow')
+plt.xlabel('Nilai k')
+plt.ylabel('WCSS') 
+
+###############################################################################
+score_silhouette = []
+for i in range(150,201):
+    kmeans_model = KMeans(n_clusters=i).fit(X)
+    
+    #Simpan hasil clustering berupa nomor klaster tiap objek/rekord di varialbel labels
+    labels = kmeans_model.labels_
+    
+    #Hitung score sillhoutte 
+    silhouette_avg = silhouette_score(X,labels)
+    score_silhouette.append(silhouette_avg)
+
+#k terbaik adalah 178            
+###############################################################################
 #Lakukan clustering terhadap X 
 
 kmeans_model = None
 
 if os.path.exists('./model.pkl'):
-    with open("model.pkl", "rb") as f:
+    with open("model178.pkl", "rb") as f:
         kmeans_model = pickle.load(f)
     
 else:
-    kmeans_model = KMeans(n_clusters=150, random_state=0).fit(X)
-    with open("model.pkl", "wb") as f:
+    kmeans_model = KMeans(n_clusters=178, random_state=0).fit(X)
+    with open("model178.pkl", "wb") as f:
         pickle.dump(kmeans_model, f)
 
 # Simpan hasil clustering berupa nomor klaster tiap objek/rekord di
@@ -144,6 +172,10 @@ plt.title('Histogram Rata-rata Jarak Setiap Cluster ke Centroid')
 plt.xticks(fontsize=8, rotation=45)
 plt.ylabel('Frekuensi')  
 plt.xlabel('Rata-rata')                      
+plt.show()
+    
+#Buat boxplot
+plt.boxplot(df_result2['Rata-rata'])
 plt.show()
 
 ###############################################################################
