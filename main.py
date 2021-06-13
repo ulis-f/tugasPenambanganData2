@@ -197,7 +197,7 @@ for key,description,myFile,myImage in zip(kp,desc,fileName,img):
     kNonWords=[]
     for k,d in zip(key,description):
         minim = sys.maxsize
-        avg = 298
+        avg = 288.5
         for index, row in new_df.iterrows():
             
             result = np.linalg.norm(row["Centroid"]-d)
